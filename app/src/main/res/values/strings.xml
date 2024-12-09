@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Grocery Store</string>
+    <string name="shop_title">Магазин продуктов</string>
+    <string name="create_shop">Создать магазин</string>
+    <string name="product_name">Название продукта</string>
+    <string name="cost">Цена</string>
+    <string name="add_product">Добавить</string>
+    <string name="exit">Exit</string>
+</resources>
