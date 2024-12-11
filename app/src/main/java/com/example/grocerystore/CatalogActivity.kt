@@ -20,9 +20,10 @@ class CatalogActivity : AppCompatActivity() {
 
     private val GALLERY_REQUEST = 302
     var photoUri: Uri? = null
-    val products: MutableList<Product> = mutableListOf()
+    var products: MutableList<Product> = mutableListOf()
     var listAdapter: ListAdapter? = null
-    val check = true
+    var check = true
+    var item: Int? = null
 
     private lateinit var toolbarMain: Toolbar
 
@@ -65,10 +66,12 @@ class CatalogActivity : AppCompatActivity() {
 
         listViewLV.setOnItemClickListener { parent, view, position, id ->
             val product = listAdapter!!.getItem(position)
+            item = position
             val intent = Intent(this, DetailsActivity::class.java)
             intent.putExtra("product", product)
-/*            intent.putExtra("check", check)
-            intent.putExtra("item", position)*/
+            intent.putExtra("products", this.products as ArrayList<Product>)
+            intent.putExtra("check", check)
+            intent.putExtra("item", item)
             startActivity(intent)
         }
 
@@ -101,6 +104,19 @@ class CatalogActivity : AppCompatActivity() {
         listViewLV = findViewById(R.id.listViewLV)
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        check = intent.extras?.getBoolean("newcheck") ?: true
+        if (!check) {
+            products = intent.getSerializableExtra("list") as MutableList<Product>
+            listAdapter = ListAdapter(this, products)
+            check = true
+        }
+        listViewLV.adapter = listAdapter
+
+
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         editImageIV = findViewById(R.id.editImageIV)
