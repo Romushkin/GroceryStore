@@ -1,12 +1,9 @@
 package com.example.grocerystore
 
 import android.annotation.SuppressLint
-import android.app.ComponentCaller
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -18,18 +15,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import java.io.IOException
 
 class CatalogActivity : AppCompatActivity() {
+
     private val GALLERY_REQUEST = 302
-    var bitmap: Bitmap? = null
+    var photoUri: Uri? = null
     val products: MutableList<Product> = mutableListOf()
+    var listAdapter: ListAdapter? = null
+    val check = true
 
     private lateinit var toolbarMain: Toolbar
 
     private lateinit var editImageIV: ImageView
     private lateinit var productNameET: EditText
     private lateinit var productCostET: EditText
+    private lateinit var productDescriptionET: EditText
     private lateinit var saveBTN: Button
     private lateinit var listViewLV: ListView
 
@@ -56,10 +56,20 @@ class CatalogActivity : AppCompatActivity() {
         saveBTN.setOnClickListener {
             createProduct()
 
-            val listAdapter = ListAdapter(this@CatalogActivity, products)
+            listAdapter = ListAdapter(this@CatalogActivity, products)
             listViewLV.adapter = listAdapter
-            listAdapter.notifyDataSetChanged()
+            listAdapter?.notifyDataSetChanged()
             clearEditFields()
+            listAdapter?.notifyDataSetChanged()
+        }
+
+        listViewLV.setOnItemClickListener { parent, view, position, id ->
+            val product = listAdapter!!.getItem(position)
+            val intent = Intent(this, DetailsActivity::class.java)
+            intent.putExtra("product", product)
+/*            intent.putExtra("check", check)
+            intent.putExtra("item", position)*/
+            startActivity(intent)
         }
 
     }
@@ -67,9 +77,12 @@ class CatalogActivity : AppCompatActivity() {
     private fun createProduct() {
         val productName = productNameET.text.toString()
         val productCost = productCostET.text.toString()
-        val productImage = bitmap
-        val product = Product(productName, productCost, productImage)
+        val productDescription = productDescriptionET.text.toString()
+        val productImage = photoUri.toString()
+        val product = Product(productName, productCost, productImage, productDescription)
         products.add(product)
+        clearEditFields()
+        photoUri = null
     }
 
     private fun clearEditFields() {
@@ -83,6 +96,7 @@ class CatalogActivity : AppCompatActivity() {
         editImageIV = findViewById(R.id.editImageIV)
         productNameET = findViewById(R.id.productNameET)
         productCostET = findViewById(R.id.productCostET)
+        productDescriptionET = findViewById(R.id.productDescriptionET)
         saveBTN = findViewById(R.id.saveBTN)
         listViewLV = findViewById(R.id.listViewLV)
     }
@@ -92,13 +106,8 @@ class CatalogActivity : AppCompatActivity() {
         editImageIV = findViewById(R.id.editImageIV)
         when (requestCode) {
             GALLERY_REQUEST -> if (resultCode === RESULT_OK) {
-                val selectedImage: Uri? = data?.data
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImage)
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-                editImageIV.setImageBitmap(bitmap)
+                photoUri = data?.data
+                editImageIV.setImageURI(photoUri)
             }
         }
     }

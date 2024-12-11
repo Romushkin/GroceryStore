@@ -33,7 +33,7 @@
                     android:id="@+id/productNameTV"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="5dp"
                     android:hint="@string/product_name" />
 
                 <TextView

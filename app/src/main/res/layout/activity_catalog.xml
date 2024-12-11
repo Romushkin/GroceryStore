@@ -50,6 +50,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/cost" />
+                <EditText
+                    android:id="@+id/productDescriptionET"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/description" />
 
             </LinearLayout>
 

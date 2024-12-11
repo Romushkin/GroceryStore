@@ -6,4 +6,6 @@
     <string name="cost">Цена</string>
     <string name="add_product">Добавить</string>
     <string name="exit">Exit</string>
+    <string name="description">Краткое описание</string>
+    <string name="save">Сохранить</string>
 </resources>

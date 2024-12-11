@@ -1,6 +1,7 @@
 package com.example.grocerystore
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +22,7 @@ class ListAdapter(context: Context, productList: MutableList<Product>) :
         val productNameTV = view?.findViewById<TextView>(R.id.productNameTV)
         val productCostTV = view?.findViewById<TextView>(R.id.productCostTV)
 
-        productImageIV?.setImageBitmap(product?.image)
+        productImageIV?.setImageURI(Uri.parse(product?.image))
         productNameTV?.text = product?.name
         productCostTV?.text = product?.cost
 
